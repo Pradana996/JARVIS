@@ -1,0 +1,43 @@
+import pyttsx3
+import speech_recognition as sr
+import pyautogui
+import os
+
+engine = pyttsx3.init('sapi5')
+voice = engine.getProperty('voices')
+engine.setProperty('voice', voice[0].id)
+engine.setParemeter('rate', 150)
+
+def speak(audio):
+  engine.say(audio)
+  engine.runAndWait()
+
+def takeCommand():
+
+  r = sr.Recognizer()
+  with sr.Microphone() as source:
+    print("listening")
+    r.pause_threshold = 1
+    audio = r.listen(source)
+
+  try:
+    print("Recognizing...")
+    query = r.recognize_google(audio, language='en-ID')
+    print(f"User said: {query}\n")
+
+  except Exception as e:
+    print("Say that again please...")
+    return "None"
+  except sr.RequestError as e:
+    print(f"Tidak dapat memahami dengan jelas. Mohon ulangi; {e}")
+    return "None"
+  except Exception as e:
+    print(f"Tidak dapat memahami dengan jelas. Mohon ulangi; {e}")
+  return query
+
+if __name__ == "__main__":
+  while True:
+    query = takeCommand().lower()
+    if 'JARVIS' in query:
+      print("Halo pak")
+      speak("Halo Pak")
